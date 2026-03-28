@@ -6,18 +6,18 @@
    E-mail: jorian@flex-wave.nl
    Alle rechten voorbehouden
    ================================================================ */
-
+ 
 if ( ! defined( 'ABSPATH' ) ) exit;
-
+ 
 class FW_Frontend {
-
+ 
     public static function init(): void {
         add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue' ] );
-
+ 
         // BINNEN de WooCommerce form, vóór de "Toevoegen" knop
         add_action( 'woocommerce_before_add_to_cart_button', [ __CLASS__, 'auto_render' ], 5 );
     }
-
+ 
     public static function enqueue(): void {
         if ( ! is_product() ) return;
         wp_enqueue_style(
@@ -34,22 +34,22 @@ class FW_Frontend {
             true   // footer
         );
     }
-
+ 
     public static function auto_render(): void {
         self::render( get_the_ID() );
     }
-
+ 
     // ── Hoofdrender ───────────────────────────────────────────────────────────
     public static function render( int $product_id ): void {
         if ( ! $product_id ) return;
-
+ 
         $groups = FW_ProductMeta::get_active_groups( $product_id );
         if ( empty( $groups ) ) return;
-
+ 
         $product    = wc_get_product( $product_id );
         $base_price = $product ? (float) $product->get_price() : 0;
         $sym        = get_woocommerce_currency_symbol();
-
+ 
         // Compacte JS-payload (alleen wat JS nodig heeft)
         $payload = [
             'product_id' => $product_id,
@@ -67,24 +67,24 @@ class FW_Frontend {
             ], $groups ),
         ];
         ?>
-
+ 
         <div class="fw-options"
              id="fw-options-<?php echo esc_attr( $product_id ); ?>"
              data-fw="<?php echo esc_attr( wp_json_encode( $payload ) ); ?>">
-
+ 
             <?php foreach ( $groups as $group ) :
                 if ( empty( $group['variations'] ) && $group['type'] !== 'text' ) continue;
             ?>
             <div class="fw-group fw-group--<?php echo esc_attr( $group['type'] ); ?>"
                  data-group-id="<?php echo esc_attr( $group['id'] ); ?>">
-
+ 
                 <div class="fw-group-label">
                     <?php echo esc_html( $group['name'] ); ?>
                     <?php if ( $group['required'] ) : ?>
                         <span class="fw-required" aria-label="Verplicht">*</span>
                     <?php endif; ?>
                 </div>
-
+ 
                 <?php
                 switch ( $group['type'] ) {
                     case 'color': self::render_color( $product_id, $group, $sym ); break;
@@ -92,13 +92,13 @@ class FW_Frontend {
                     default:      self::render_radio( $product_id, $group, $sym ); break;
                 }
                 ?>
-
+ 
                 <div class="fw-group-error" role="alert" style="display:none">
                     Maak een keuze voor "<?php echo esc_html( $group['name'] ); ?>".
                 </div>
             </div>
             <?php endforeach; ?>
-
+ 
             <!-- Live totaalprijs -->
             <div class="fw-total">
                 <span class="fw-total-label">Totaal:</span>
@@ -106,7 +106,7 @@ class FW_Frontend {
                     <?php echo esc_html( $sym ); ?>&nbsp;<?php echo number_format( $base_price, 2, ',', '.' ); ?>
                 </span>
             </div>
-
+ 
             <!-- Hidden fields — zitten nu altijd binnen de WC <form> -->
             <input type="hidden" name="fw_product_id"
                    value="<?php echo esc_attr( $product_id ); ?>">
@@ -116,11 +116,11 @@ class FW_Frontend {
             <input type="hidden" name="fw_extra_price"
                    id="fw-extra-<?php echo esc_attr( $product_id ); ?>"
                    value="0">
-
+ 
         </div><!-- .fw-options -->
         <?php
     }
-
+ 
     // ── Radio (keuzeknop) ─────────────────────────────────────────────────────
     private static function render_radio( int $pid, array $group, string $sym ): void {
         $name = 'fw_g' . $pid . '_' . $group['id'];
@@ -144,6 +144,7 @@ class FW_Frontend {
                        data-group="<?php echo esc_attr( $group['id'] ); ?>"
                        data-price="<?php echo esc_attr( $price ); ?>"
                        data-label="<?php echo esc_attr( $v['name'] ?? '' ); ?>"
+                       data-image="<?php echo esc_url( $v['image_url'] ?? '' ); ?>"
                        value="<?php echo esc_attr( $vi ); ?>">
                 <span class="fw-opt-name"><?php echo esc_html( $v['name'] ?? '' ); ?></span>
                 <?php echo $badge; ?>
@@ -152,7 +153,7 @@ class FW_Frontend {
         }
         echo '</div>';
     }
-
+ 
     // ── Kleurstaal ────────────────────────────────────────────────────────────
     private static function render_color( int $pid, array $group, string $sym ): void {
         $name = 'fw_g' . $pid . '_' . $group['id'];
@@ -183,12 +184,12 @@ class FW_Frontend {
             <?php
         }
         echo '</div>';
-
+ 
         // Live kleurpreview
         echo '<div class="fw-color-preview" id="fw-cp-' . esc_attr( $name ) . '" aria-live="polite" style="display:none">'
            . '<span class="fw-cp-dot"></span><span class="fw-cp-label"></span></div>';
     }
-
+ 
     // ── Vrije tekstinvoer ─────────────────────────────────────────────────────
     private static function render_text( int $pid, array $group, string $sym ): void {
         $v           = $group['variations'][0] ?? [];

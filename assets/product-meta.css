@@ -1,7 +1,7 @@
 /* ================================================================
    FlexWave – Frontend CSS
    https://flex-wave.nl
-   Copyright (c) 2026 Jorian Beukens
+   Copyright (c) 2026 FlexWave
    E-mail: jorian@flex-wave.nl
    Alle rechten voorbehouden
    ================================================================ */
