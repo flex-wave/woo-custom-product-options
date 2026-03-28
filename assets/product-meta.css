@@ -1,0 +1,195 @@
+/* ================================================================
+   FlexWave – Frontend CSS
+   https://flex-wave.nl
+   Copyright (c) 2026 Jorian Beukens
+   E-mail: jorian@flex-wave.nl
+   Alle rechten voorbehouden
+   ================================================================ */
+
+#fw-pm-list {
+    margin-top: .25rem;
+}
+
+.fw-pm-row {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    background: #fafafa;
+    transition: border-color .15s, background .15s;
+}
+
+.fw-pm-row.fw-pm--active {
+    border-color: #0073aa;
+    background: #f0f8ff;
+}
+
+.fw-pm-row.fw-row--dragging {
+    opacity: .45;
+    background: #dceefb !important;
+}
+
+.fw-pm-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    flex-wrap: nowrap;
+    min-height: 44px;
+}
+
+.fw-pm-drag {
+    cursor: grab;
+    color: #bbb;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    line-height: 1;
+    user-select: none;
+}
+.fw-pm-drag:active { cursor: grabbing; }
+
+.fw-pm-toggle input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.fw-pm-icon { font-size: 1rem; flex-shrink: 0; }
+
+.fw-pm-name {
+    font-weight: 600;
+    font-size: .95rem;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fw-pm-row.fw-pm--active .fw-pm-name { color: #0073aa; }
+
+.fw-pm-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.fw-pm-badge {
+    font-size: .78rem;
+    background: #e5e5e5;
+    border-radius: 10px;
+    padding: 2px 8px;
+    color: #555;
+    white-space: nowrap;
+}
+
+.fw-pm-badge--filtered {
+    background: #fff3cd;
+    color: #856404;
+    font-weight: 600;
+}
+
+.fw-pm-hint { font-size: .8rem; color: #777; font-style: italic; }
+
+.fw-pm-req {
+    font-size: .72rem;
+    background: #fff3e0;
+    color: #e65c00;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.fw-pm-expand {
+    font-size: .78rem !important;
+    padding: 2px 8px !important;
+    height: auto !important;
+    line-height: 1.6 !important;
+    white-space: nowrap;
+}
+
+.fw-pm-expand.fw-expanded { background: #0073aa; color: #fff; border-color: #005f8d; }
+
+.fw-pm-edit {
+    font-size: .78rem !important;
+    padding: 2px 7px !important;
+    height: auto !important;
+    line-height: 1.6 !important;
+    flex-shrink: 0;
+}
+
+.fw-pm-vars {
+    border-top: 1px dashed #c8d7e1;
+}
+
+.fw-pm-vars-inner {
+    padding: 10px 14px 12px 42px;
+}
+
+.fw-pm-selall {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.fw-pm-selall input { width: 16px; height: 16px; }
+
+.fw-pm-var-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.fw-pm-var-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 9px;
+    cursor: pointer;
+    font-size: .85rem;
+    transition: border-color .12s, background .12s;
+    user-select: none;
+}
+
+.fw-pm-var-item:has(input:checked) {
+    border-color: #0073aa;
+    background: #e8f4fb;
+}
+
+.fw-pm-var-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.fw-pm-var-thumb {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.fw-pm-var-swatch {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.15);
+    flex-shrink: 0;
+}
+
+.fw-pm-var-name { font-weight: 500; }
+
+.fw-pm-var-price {
+    font-size: .78rem;
+    color: #0073aa;
+    margin-left: 2px;
+}
