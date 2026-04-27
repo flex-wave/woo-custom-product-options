@@ -23,6 +23,7 @@ require_once FW_DIR . 'includes/class-fw-library.php';
 require_once FW_DIR . 'includes/class-fw-product-meta.php';
 require_once FW_DIR . 'includes/class-fw-frontend.php';
 require_once FW_DIR . 'includes/class-fw-pricing.php';
+require_once __DIR__ . '/includes/class-fw-lengths-autosave.php';
 
 add_action( 'plugins_loaded', function () {
     FW_Library::init();

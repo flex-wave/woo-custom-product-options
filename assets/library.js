@@ -97,4 +97,37 @@
     });
   }
 
+  // --- LENGTE MODULE: toevoegen/verwijderen rijen ---
+  const lengthTable = document.getElementById('fw-length-table');
+  const addLengthBtn = document.getElementById('fw-add-length');
+  if (lengthTable && addLengthBtn) {
+    addLengthBtn.addEventListener('click', function () {
+      const tbody = lengthTable.querySelector('tbody');
+      const rows = tbody.querySelectorAll('tr');
+      let idx = 0;
+      // Zoek hoogste index
+      rows.forEach(row => {
+        const input = row.querySelector('input[name^="fw_length_lengths["]');
+        if (input) {
+          const m = input.name.match(/fw_length_lengths\[(\d+)\]/);
+          if (m && parseInt(m[1]) > idx) idx = parseInt(m[1]);
+        }
+      });
+      idx++;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="number" name="fw_length_lengths[${idx}][value]" value="" step="0.1" min="0" style="width:100%"></td>
+        <td><input type="number" name="fw_length_lengths[${idx}][price]" value="" step="0.01" min="0" style="width:100%"></td>
+        <td><button type="button" class="button fw-remove-length" title="Verwijder">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    lengthTable.addEventListener('click', function(e) {
+      if (e.target.classList.contains('fw-remove-length')) {
+        const row = e.target.closest('tr');
+        if (row) row.remove();
+      }
+    });
+  }
+
 })();

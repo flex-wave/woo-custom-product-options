@@ -1,86 +1,82 @@
-# 🌊 FlexWave Product Options v1.0.0
+# Woo Custom Product Options – FlexWave
 
-Centrale optiebibliotheek voor WooCommerce. Maak optiegroepen aan, wijs ze per product toe, en laat klanten live hun prijs opbouwen.
+## Overzicht
+Deze plugin breidt WooCommerce uit met krachtige, centraal beheerde productopties, waaronder een geavanceerde lengtemodule voor producten met vaste en maatwerk lengtes. Volledig OOP, schaalbaar en future-proof.
+
+---
+
+## Belangrijkste features
+
+- **Centrale optiegroepen**: beheer opties (zoals lengte, kleur, tekst, etc.) centraal in de bibliotheek.
+- **Lengtemodule**:
+  - Vaste lengtes (mm) met prijs per maat.
+  - Maatwerk lengte (mm, met stapgrootte, min/max, validatie).
+  - Prijsbepaling: maatwerk krijgt prijs van eerstvolgende vaste maat die ≥ gekozen maat.
+  - Per product bepaal je welke vaste lengtes getoond worden.
+- **Per product**: activeer optiegroepen en selecteer per optie welke variaties/maten zichtbaar zijn.
+- **Volledige WooCommerce integratie**: opties in winkelwagen, checkout, order, prijsaanpassing, cart meta.
+- **Toegankelijk, snel en schaalbaar**: OOP, hooks, sanitization, nonce, validatie, nette admin UI.
 
 ---
 
 ## Installatie
-
-1. Upload map `flexwave-product-options/` naar `/wp-content/plugins/`
-2. Activeer de plugin via WordPress → Plugins
-3. Ga naar **FW Optiegroepen** en maak je eerste groepen aan
-4. Open een product en vink de gewenste groepen aan in de **FlexWave** meta box
-
----
-
-## Werking
-
-### 1. Optiegroepen (centrale bibliotheek)
-Ga naar **FW Optiegroepen → Groep toevoegen**. Kies een type:
-
-| Type | Gebruik |
-|---|---|
-| 🔘 Keuze (radio) | Onderstel, poot, afmeting, materiaal |
-| 🎨 Kleurstaal | Kleur blad, RAL-kleur, houtsoort |
-| ✏️ Vrije tekst | Gravure, naam, opmerking |
-
-Voeg variaties toe met naam en meerprijs. Afbeeldingen zijn optioneel.
-
-### 2. Per product aanvinken
-Op het product bewerkscherm → meta box **FlexWave – Actieve optiegroepen**:
-- Vink aan welke groepen actief zijn
-- Sleep rijen om de volgorde op de productpagina te bepalen
-
-### 3. Prijsopbouw
-- WooCommerce productprijs = **basisprijs**
-- Gekozen opties tellen er **bovenop**
-- Totaalprijs wordt live getoond op de productpagina
-- De echte cartprijs wordt automatisch aangepast
+1. Upload de plugin naar `wp-content/plugins/woo-custom-product-options`.
+2. Activeer via het WordPress admin menu.
+3. Ga naar **FW Optiegroepen** om centrale opties aan te maken.
+4. Ga naar een product en activeer gewenste optiegroepen en variaties.
 
 ---
 
-## Mapstructuur
+## Lengtemodule – Werking
 
-```
-flexwave-product-options/
-├── flexwave-product-options.php
-├── includes/
-│   ├── class-fw-library.php        ← CPT fw_option_group + variaties
-│   ├── class-fw-product-meta.php   ← Groepen per product aanvinken
-│   ├── class-fw-frontend.php       ← Frontend render (radio/kleur/tekst)
-│   └── class-fw-pricing.php        ← WooCommerce prijsintegratie
-└── assets/
-    ├── frontend.js / .css          ← Live prijsberekening
-    ├── library.js / .css           ← Bibliotheek admin
-    └── product-meta.js / .css      ← Product admin
-```
+### 1. Optiegroep aanmaken
+- Kies type **Lengte**.
+- Voeg vaste lengtes toe (in mm) met prijs per maat.
+- Stel stapgrootte (mm), min/max maatwerk (optioneel) en maatwerk-optie in.
 
----
+### 2. Per product
+- Activeer de lengte-optiegroep.
+- Vink per vaste maat aan welke zichtbaar zijn op dit product.
 
-## Meta keys
+### 3. Frontend
+- Klant kiest uit actieve vaste lengtes (dropdown).
+- Optioneel: maatwerk lengte invoer (mm, stapgrootte, validatie).
+- Prijs wordt automatisch bepaald volgens de logica:
+  - Vaste maat: prijs van die maat.
+  - Maatwerk: prijs van eerstvolgende vaste maat die ≥ gekozen maat.
 
-| Key | Post type | Inhoud |
-|---|---|---|
-| `_fw_group_type` | `fw_option_group` | `radio` / `color` / `text` |
-| `_fw_group_required` | `fw_option_group` | `1` of leeg |
-| `_fw_variations` | `fw_option_group` | JSON array variaties |
-| `_fw_active_groups` | `product` | JSON array group IDs (op volgorde) |
+### 4. Winkelwagen & order
+- Gekozen lengte, type (vast/maatwerk), prijs-lengte worden als cart meta opgeslagen.
+- Alles zichtbaar in winkelwagen, checkout en order.
 
 ---
 
-## Template tag
-
-Standaard auto-inject via `woocommerce_before_add_to_cart_button`.  
-Handmatig in je thema:
-
-```php
-<?php flexwave_render_options(); ?>
-```
+## Hooks & Techniek
+- WooCommerce hooks: `woocommerce_before_add_to_cart_button`, `woocommerce_add_cart_item_data`, `woocommerce_get_item_data`, `woocommerce_before_calculate_totals`, etc.
+- OOP structuur, alles met FW_ prefix.
+- Volledige validatie, sanitization, nonce, edge case handling.
 
 ---
 
-## Contact
+## Edge cases
+- Geen vaste lengtes actief → module uitgeschakeld.
+- Maatwerk exact gelijk aan vaste maat → juiste prijs.
+- Maatwerk buiten bereik → foutmelding.
+- Lengtes altijd gesorteerd oplopend.
 
-Voor vragen of support:  
-📧 jorian@flex-wave.nl
-🌐 [flex-wave.nl](https://flex-wave.nl)
+---
+
+## Credits
+- FlexWave – Jorian Beukens
+- WooCommerce
+
+---
+
+## Changelog
+
+### 2026-04-27
+- Volledige centrale lengtemodule met vaste en maatwerk lengtes, per product instelbaar.
+- Prijslogica op mm-niveau, edge cases afgevangen.
+- Admin UI opgeschoond voor lengte-opties.
+- Documentatie volledig bijgewerkt.
+
